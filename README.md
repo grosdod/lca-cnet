@@ -33,6 +33,7 @@ Un fichier par série, au format des séries produites dans le projet :
 
 - `✅` marque les bonnes réponses ; une QRU doit en avoir exactement une.
 - `**Notion :**` doit reprendre un intitulé de `contenu/notions.txt` (vocabulaire des annales). Plusieurs notions : les séparer par ` ; `.
+- Images : placer les fichiers (PNG, JPG…) dans un sous-dossier, par ex. `contenu/qi/img/ma-serie/`, et les appeler dans l'énoncé par `![Figure 1](img/ma-serie/fig1.png)` (ou une ligne `Image : img/ma-serie/fig1.png`). Le chemin est relatif au fichier .md.
 - Une nouvelle notion est acceptée (elle s'ajoute en fin de liste) ; pour choisir sa place, l'ajouter dans `notions.txt`.
 
 ### Épreuves LCA complètes : `contenu/lca/<nom>/`

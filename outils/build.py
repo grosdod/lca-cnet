@@ -66,10 +66,30 @@ def parse_bloc(lignes, ou):
     return {'enonce': texte, 'propositions': props, 'commentaire': commentaire or piege, 'notions': notions}
 
 
+IMAGES = []  # (source, chemin publié)
+
+
+def images(texte, dossier):
+    """Accepte ![légende](chemin) ou « Image : chemin » ; copie l'image dans site/img/contenu/."""
+    texte = re.sub(r'(?m)^Image\s*:\s*(\S+)\s*$', lambda m: f'![]({m.group(1)})', texte)
+    def remplace(m):
+        alt, chemin = m.group(1), m.group(2)
+        if re.match(r'https?:', chemin):
+            return m.group(0)
+        source = (dossier / chemin).resolve()
+        if not source.exists():
+            erreurs.append(f'image introuvable : {chemin} (depuis {dossier.name})')
+            return m.group(0)
+        publie = 'img/contenu/' + source.relative_to(CONTENU).as_posix()
+        IMAGES.append((source, publie))
+        return f'![{alt}]({publie})'
+    return re.sub(r'!\[([^\]]*)\]\(([^)\s]+)\)', remplace, texte)
+
+
 def lire_qi():
     questions = []
     for f in sorted((CONTENU / 'qi').glob('*.md')):
-        txt = f.read_text(encoding='utf-8')
+        txt = images(f.read_text(encoding='utf-8'), f.parent)
         serie = f.stem
         titre = re.search(r'^# (.+)$', txt, re.M)
         blocs = re.split(r'(?m)^## ', txt)[1:]
@@ -97,7 +117,7 @@ def lire_lca():
     epreuves = []
     for f in sorted((CONTENU / 'lca').glob('*/sujet.md')):
         dossier = f.parent
-        txt = f.read_text(encoding='utf-8')
+        txt = images(f.read_text(encoding='utf-8'), dossier)
         meta = {}
         for cle in ('Titre de l\'article', 'Référence courte', 'Référence complète', 'Numéro de LCA',
                     'Lien vers l\'article', 'Article en libre accès'):
@@ -179,6 +199,11 @@ def main():
     for e in lca:
         e['questions'] = [masquer(q) for q in e['questions']]
     SORTIE.mkdir(parents=True, exist_ok=True)
+    import shutil
+    for source, publie in IMAGES:
+        cible = RACINE / 'site' / publie
+        cible.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(source, cible)
     (SORTIE / 'qi.json').write_text(json.dumps({'notions': utilisees, 'questions': qi}, ensure_ascii=False), encoding='utf-8')
     (SORTIE / 'lca.json').write_text(json.dumps({'epreuves': lca}, ensure_ascii=False), encoding='utf-8')
     print(f'OK : {len(qi)} QI sur {len(utilisees)} notions, {len(lca)} épreuve(s) LCA')
