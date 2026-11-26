@@ -119,7 +119,8 @@ def lire_lca():
                 if not m:
                     alertes.append(f'{f} : section ignorée « ## {t} »'); continue
                 num, libelle = m.groups()
-                typ = 'QRU' if 'unique' in libelle.lower() else 'QRM'
+                lib = libelle.lower()
+                typ = 'QRU' if 'unique' in lib else 'QRP' if 'précisé' in lib else 'QRM'
                 ou = f'{dossier.name} question {num}'
                 q = parse_bloc(corps.split('\n'), ou)
                 n_justes = sum(p['juste'] for p in q['propositions'])
@@ -129,7 +130,8 @@ def lire_lca():
                 questions.append(q)
         # annexes : fichiers annexe*.md du dossier, PDF publiés seulement s'ils sont dans le dossier
         for a in sorted(dossier.glob('annexe*.md')):
-            annexes.append({'titre': a.stem.replace('_', ' ').capitalize(), 'contenu': a.read_text(encoding='utf-8')})
+            num = re.sub(r'\D', '', a.stem) or ''
+            annexes.append({'titre': f'Annexe {num}'.strip(), 'contenu': a.read_text(encoding='utf-8')})
         pdf = sorted(p.name for p in dossier.glob('*.pdf'))
         epreuves.append({
             'id': slug(dossier.name), 'dossier': dossier.name,

@@ -283,7 +283,7 @@ footer.pied { background: var(--foot); color: var(--foot-fg); font-size: .85rem 
       </div>
       ${ep ? docsEpreuve(ep) : ''}
       <article class="qcard ${S.revealed ? 'revealed' : ''}">
-        <div class="qhead"><span class="pill">${q.type === 'QRU' ? 'QRU · une seule réponse' : 'QRM · plusieurs réponses'}</span>
+        <div class="qhead"><span class="pill">${q.type === 'QRU' ? 'QRU · une seule réponse' : q.type === 'QRP' ? 'QRP · nombre de réponses précisé dans l\'énoncé' : 'QRM · plusieurs réponses'}</span>
           ${(q.notions || []).map(x => `<span class="pill muted">${esc(x)}</span>`).join('')}</div>
         <div class="md">${md(q.enonce)}</div>
         <div class="props" role="${q.type === 'QRU' ? 'radiogroup' : 'group'}">
