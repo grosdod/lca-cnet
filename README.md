@@ -3,6 +3,8 @@
 Plateforme d'entraînement à la lecture critique d'article (LCA) du Collège National des Enseignants de Thérapeutique.
 Site : https://lca.therap.fr
 
+Conception et coordination : Pr Hervé Devilliers.
+
 ## Ajouter des questions
 
 Il suffit de déposer des fichiers Markdown sur GitHub (bouton **Add file → Upload files**) : le site se met à jour tout seul en 1 à 2 minutes (onglet **Actions** pour suivre).
