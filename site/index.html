@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Entraînement LCA CNET</title>
 <meta name="claude:viewport-fit-sides" content="cover">
+<link rel="icon" href="img/logo-cnet.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
 <style>
@@ -36,7 +37,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 header.top { background: var(--bar); color: var(--bar-fg); border-bottom: 3px solid var(--red); box-shadow: 0 1px 6px rgba(0,0,0,.08); position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5 }
 header.top .wrap { display: flex; align-items: center; gap: 16px; padding-block: 12px; flex-wrap: wrap }
 .brand { display: flex; align-items: baseline; gap: 10px; color: inherit; text-decoration: none }
-.brand { align-items: center } .brand img { height: 40px; width: auto; display: block; border-radius: 2px }
+.brand { align-items: center } .brand img { height: 40px; width: auto; display: block; background: #ffffff; border-radius: 4px }
 .brand b { font-weight: 700; letter-spacing: .04em; font-size: 1.1rem; background: var(--red); color: var(--red-fg); padding: 2px 8px; border-radius: 2px }
 .brand b + i { font-style: normal; font-weight: 700; color: var(--muted); margin-left: -8px; font-size: 1.1rem }
 .brand span { font-weight: 700; text-transform: uppercase; font-size: .85rem; letter-spacing: .06em; padding-left: 10px; border-left: 1px solid var(--line) }
@@ -124,7 +125,7 @@ footer.pied { background: var(--foot); color: var(--foot-fg); font-size: .85rem 
 </head>
 <body>
 <header class="top"><div class="wrap">
-  <a class="brand" href="#accueil" aria-label="CNET, entraînement LCA"><b>CN</b><i>ET</i><span>Entraînement LCA</span></a>
+  <a class="brand" href="#accueil"><img src="img/logo-cnet.webp" width="121" height="40" alt="CNET, Collège National des Enseignants de Thérapeutique"><span>Entraînement LCA</span></a>
   <nav class="tabs">
     <a href="#accueil" data-tab="accueil">QI par notion</a>
     <a href="#lca" data-tab="lca">Épreuves LCA</a>
