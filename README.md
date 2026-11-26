@@ -50,4 +50,4 @@ Le script signale les QRU sans bonne réponse unique, les propositions manquante
 
 ## Ce qui est public
 
-Le dépôt et le site sont publics : questions, corrections et épreuves. Les résultats des étudiants restent dans leur navigateur (aucun compte, aucune donnée collectée).
+© CNET, contenu sous licence CC BY-NC-ND 4.0 (voir LICENSE). Les réponses sont encodées dans les données du site et ne sont décodées qu'après validation. Les résultats des étudiants restent dans leur navigateur (aucun compte, aucune donnée collectée).

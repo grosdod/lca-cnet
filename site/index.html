@@ -132,7 +132,7 @@ footer.pied { background: var(--foot); color: var(--foot-fg); font-size: .85rem 
   </nav>
 </div></header>
 <main class="wrap" id="app"><p class="lede">Chargement des questions…</p></main>
-<footer class="pied"><div class="wrap">Collège National des Enseignants de Thérapeutique · <a href="https://therap.fr" target="_blank" rel="noopener">therap.fr</a><br>Questions rédigées sur le modèle des annales ECNi/EDN 2016-2026. Vos résultats restent dans ce navigateur. Les articles sous droits sont accessibles par un lien vers l'éditeur.</div></footer>
+<footer class="pied"><div class="wrap">© Collège National des Enseignants de Thérapeutique (<a href="https://therap.fr" target="_blank" rel="noopener">therap.fr</a>). Contenu sous licence <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.fr" target="_blank" rel="noopener">CC BY-NC-ND 4.0</a> : partage autorisé avec mention du CNET, sans usage commercial ni modification.<br>Questions rédigées sur le modèle des annales ECNi/EDN 2016-2026. Vos résultats restent dans ce navigateur. Les articles sous droits sont accessibles par un lien vers l'éditeur.</div></footer>
 
 <script>
 (function () {
@@ -181,6 +181,17 @@ footer.pied { background: var(--foot); color: var(--foot-fg); font-size: .85rem 
       out.push('<p>' + mdInline(par.join(' ')) + '</p>');
     }
     return out.join('');
+  }
+  // Les réponses sont encodées dans les données ; on les décode à la validation.
+  const CLE_X = 'cnet-lca';
+  function devoiler(q) {
+    if (!q.x) return q;
+    const b = atob(q.x), o = new Uint8Array(b.length);
+    for (let i = 0; i < b.length; i++) o[i] = b.charCodeAt(i) ^ CLE_X.charCodeAt(i % CLE_X.length);
+    const d = JSON.parse(new TextDecoder().decode(o));
+    q.propositions.forEach((p, k) => { p.juste = d.j[k]; p.correction = d.c[k] });
+    q.commentaire = d.m; delete q.x;
+    return q;
   }
   const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]] } return a };
   const fmt = x => (Math.round(x * 100) / 100).toString().replace('.', ',');
@@ -307,7 +318,7 @@ footer.pied { background: var(--foot); color: var(--foot-fg); font-size: .85rem 
         app.querySelectorAll('.props input').forEach(x => { S.rep[x.value] = x.checked });
       });
       app.querySelector('#valider').onclick = () => {
-        const r = noter(q, S.rep); S.notes[S.i] = r; S.revealed = true;
+        devoiler(q); const r = noter(q, S.rep); S.notes[S.i] = r; S.revealed = true;
         const st = store.get(); if (q.id) { st.scores[q.id] = r.pts; store.set(st) }
         vueQuestion(); app.querySelector('.qcard .note')?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
       };

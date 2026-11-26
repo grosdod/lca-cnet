@@ -9,7 +9,7 @@ Usage : python outils/build.py          (depuis la racine du dépôt)
 
 Le script s'arrête avec un message clair si un fichier est mal formé.
 """
-import json, re, sys, pathlib
+import base64, json, re, sys, pathlib
 
 RACINE = pathlib.Path(__file__).resolve().parent.parent
 CONTENU = RACINE / 'contenu'
@@ -141,6 +141,22 @@ def lire_lca():
     return epreuves
 
 
+CLE = b'cnet-lca'
+
+
+def masquer(q):
+    """Retire les réponses du texte clair : bonnes réponses, corrections et commentaire
+    sont encodés (XOR + base64) et décodés par le site seulement après validation."""
+    secret = {'j': [p['juste'] for p in q['propositions']],
+              'c': [p['correction'] for p in q['propositions']],
+              'm': q.pop('commentaire', '')}
+    for p in q['propositions']:
+        p.pop('juste'); p.pop('correction')
+    brut = json.dumps(secret, ensure_ascii=False).encode('utf-8')
+    q['x'] = base64.b64encode(bytes(b ^ CLE[i % len(CLE)] for i, b in enumerate(brut))).decode()
+    return q
+
+
 def main():
     ordre = [l.strip() for l in (CONTENU / 'notions.txt').read_text(encoding='utf-8').splitlines() if l.strip()]
     qi = lire_qi()
@@ -157,6 +173,9 @@ def main():
         for e in erreurs:
             print('ERREUR :', e)
         sys.exit(1)
+    qi = [masquer(q) for q in qi]
+    for e in lca:
+        e['questions'] = [masquer(q) for q in e['questions']]
     SORTIE.mkdir(parents=True, exist_ok=True)
     (SORTIE / 'qi.json').write_text(json.dumps({'notions': utilisees, 'questions': qi}, ensure_ascii=False), encoding='utf-8')
     (SORTIE / 'lca.json').write_text(json.dumps({'epreuves': lca}, ensure_ascii=False), encoding='utf-8')
