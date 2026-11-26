@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Entraînement LCA CNET</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+/* Mise en page : charte du CNET (therap.fr) : bandeau blanc avec logo, rouge CNET pour l'action, ardoise pour le texte, pied sombre. Une colonne de lecture (≈ 800 px). */
+:root {
+  --bg: #f3f4f6; --surface: #ffffff; --fg: #3c4858; --strong: #232c38; --muted: #6b7584; --line: #dde1e7;
+  --bar: #ffffff; --bar-fg: #3c4858; --red: #b50c0c; --red-fg: #ffffff; --accent: #b50c0c; --accent-soft: #f8e7e7;
+  --navy: #2e4467; --ok: #1d7a46; --ok-soft: #e3f3ea; --ko: #b3261e; --ko-soft: #fbe7e5; --warn: #9a6400; --warn-soft: #fdf1da;
+  --foot: #323437; --foot-fg: #a9adb3;
+  --font-body: Arial, Helvetica, "Liberation Sans", sans-serif;
+  --font-read: Georgia, "Times New Roman", serif;
+  --radius: 6px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #15181d; --surface: #1d2128; --fg: #d9dde3; --strong: #f1f3f6; --muted: #98a0ac; --line: #313741;
+  --bar: #1d2128; --bar-fg: #d9dde3; --red: #c81e1e; --accent: #ef6b62; --accent-soft: #3a1f1f;
+  --navy: #9db4dc; --ok: #6fcf97; --ok-soft: #173225; --ko: #f08c84; --ko-soft: #3a1c1a; --warn: #f0c062; --warn-soft: #3a2e14;
+  --foot: #0f1114; --foot-fg: #8b919a; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #15181d; --surface: #1d2128; --fg: #d9dde3; --strong: #f1f3f6; --muted: #98a0ac; --line: #313741;
+  --bar: #1d2128; --bar-fg: #d9dde3; --red: #c81e1e; --accent: #ef6b62; --accent-soft: #3a1f1f;
+  --navy: #9db4dc; --ok: #6fcf97; --ok-soft: #173225; --ko: #f08c84; --ko-soft: #3a1c1a; --warn: #f0c062; --warn-soft: #3a2e14;
+  --foot: #0f1114; --foot-fg: #8b919a; color-scheme: dark }
+* { box-sizing: border-box }
+html, body { margin: 0 }
+body { background: var(--bg); color: var(--fg); font: 17px/1.55 var(--font-body) }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bar) }
+.wrap { max-width: 800px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
+header.top { background: var(--bar); color: var(--bar-fg); border-bottom: 3px solid var(--red); box-shadow: 0 1px 6px rgba(0,0,0,.08); position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5 }
+header.top .wrap { display: flex; align-items: center; gap: 16px; padding-block: 12px; flex-wrap: wrap }
+.brand { display: flex; align-items: baseline; gap: 10px; color: inherit; text-decoration: none }
+.brand { align-items: center } .brand img { height: 40px; width: auto; display: block; border-radius: 2px }
+.brand b { font-weight: 700; letter-spacing: .04em; font-size: 1.1rem; background: var(--red); color: var(--red-fg); padding: 2px 8px; border-radius: 2px }
+.brand b + i { font-style: normal; font-weight: 700; color: var(--muted); margin-left: -8px; font-size: 1.1rem }
+.brand span { font-weight: 700; text-transform: uppercase; font-size: .85rem; letter-spacing: .06em; padding-left: 10px; border-left: 1px solid var(--line) }
+nav.tabs { margin-left: auto; display: flex; gap: 4px }
+nav.tabs a { color: var(--bar-fg); text-transform: uppercase; font-size: .8rem; letter-spacing: .04em; text-decoration: none; padding: 6px 12px; border-radius: 6px; font-weight: 600 }
+nav.tabs a[aria-current="page"] { color: var(--accent); box-shadow: inset 0 -2px 0 var(--accent); border-radius: 0 }
+main { padding-block: 28px 64px }
+h1, h2, h3 { line-height: 1.2; text-wrap: balance; margin: 0; color: var(--strong) }
+h1 { font-size: 1.7rem } h2 { font-size: 1.3rem } h3 { font-size: 1.05rem }
+p { margin: 0 }
+.stack { display: flex; flex-direction: column; gap: 16px }
+.lede { color: var(--muted) }
+.eyebrow { text-transform: uppercase; letter-spacing: .08em; font-size: .78rem; font-weight: 700; color: var(--muted) }
+button, .btn { font: inherit; font-weight: 600; border-radius: 6px; padding: 9px 16px; border: 1.5px solid var(--red); background: var(--red); color: var(--red-fg); text-transform: uppercase; font-size: .85rem; letter-spacing: .04em; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px }
+button.ghost, .btn.ghost { background: transparent; color: var(--accent); border-color: var(--accent) }
+button:disabled { opacity: .45; cursor: not-allowed }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, label:focus-within { outline: 3px solid var(--accent); outline-offset: 2px }
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center }
+/* Choix des notions */
+.notions { display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface) }
+.notion { display: grid; grid-template-columns: auto 1fr auto; gap: 4px 12px; align-items: center; padding: 10px 14px; border-top: 1px solid var(--line); cursor: pointer }
+.notion:first-child { border-top: 0 }
+.notion input { width: 18px; height: 18px; accent-color: var(--accent) }
+.notion .nom { min-width: 0 }
+.notion .meta { font-size: .85rem; color: var(--muted); font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap }
+.notion .bar { grid-column: 2 / 4; height: 4px; background: var(--line); border-radius: 2px; overflow: hidden }
+.notion .bar i { display: block; height: 100%; background: var(--ok) }
+.options { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px }
+.field { display: flex; flex-direction: column; gap: 4px; font-weight: 600 }
+.field select, .field input[type=number] { font: inherit; padding: 7px 10px; border-radius: 6px; border: 1px solid var(--line); background: var(--surface); color: var(--fg) }
+.check { display: flex; gap: 8px; align-items: center; font-weight: 400 }
+.sticky-go { position: sticky; bottom: 0; background: var(--bg); padding-block: 12px calc(12px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line) }
+/* Question */
+.progress { height: 6px; background: var(--line); border-radius: 3px; overflow: hidden }
+.progress i { display: block; height: 100%; background: var(--accent); transition: width .25s }
+.qcard { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; display: flex; flex-direction: column; gap: 16px }
+.qhead { display: flex; gap: 8px; flex-wrap: wrap; align-items: center }
+.pill { font-size: .78rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); letter-spacing: .03em }
+.pill.muted { background: transparent; border: 1px solid var(--line); color: var(--muted); font-weight: 600 }
+.md { font-family: var(--font-read); font-size: 1.02rem; line-height: 1.6; min-width: 0 }
+.md > * + * { margin-top: .7em } .md ul, .md ol { padding-left: 1.3em; margin-block: 0 } .md h4 { margin: .8em 0 .3em; font-family: var(--font-body) }
+.md table { border-collapse: collapse; font-family: var(--font-body); font-size: .92rem; font-variant-numeric: tabular-nums; margin-block: .7em }
+.md th, .md td { border: 1px solid var(--line); padding: 5px 9px; text-align: left; vertical-align: top }
+.md th { background: var(--accent-soft) }
+.tablewrap { overflow-x: auto; max-width: 100% }
+.props { display: flex; flex-direction: column; gap: 8px }
+.prop { display: grid; grid-template-columns: auto auto 1fr; gap: 10px; align-items: start; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 6px; cursor: pointer; background: var(--surface) }
+.prop:hover { border-color: var(--accent) }
+.prop input { margin-top: 4px; width: 18px; height: 18px; accent-color: var(--accent) }
+.prop .l { font-weight: 700; color: var(--muted); min-width: 1.2em }
+.prop .t { min-width: 0 }
+.prop .corr { grid-column: 3; font-size: .95rem; color: var(--fg); border-left: 3px solid var(--line); padding-left: 10px; margin-top: 4px }
+.prop .verdict { grid-column: 3; font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em }
+.revealed .prop { cursor: default }
+.revealed .prop:hover { border-color: var(--line) }
+.prop.vrai { border-color: var(--ok); background: var(--ok-soft) }
+.prop.vrai .verdict { color: var(--ok) }
+.prop.faux .verdict { color: var(--muted) }
+.prop.erreur { border-color: var(--ko); background: var(--ko-soft) }
+.prop.erreur .verdict { color: var(--ko) }
+.prop.vrai .corr { border-color: var(--ok) } .prop.erreur .corr { border-color: var(--ko) }
+.note { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; padding: 10px 14px; border-radius: 6px; font-weight: 600 }
+.note.n1 { background: var(--ok-soft); color: var(--ok) } .note.n05 { background: var(--warn-soft); color: var(--warn) } .note.n0 { background: var(--ko-soft); color: var(--ko) }
+.note .pts { font-size: 1.3rem; font-variant-numeric: tabular-nums }
+.comment { font-size: .93rem; color: var(--muted); border-top: 1px dashed var(--line); padding-top: 12px }
+.actions { display: flex; gap: 10px; justify-content: space-between; flex-wrap: wrap }
+/* Bilan */
+.score { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap }
+.score .big { font-size: 2.6rem; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--accent) }
+table.bilan { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums }
+table.bilan th, table.bilan td { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top }
+table.bilan td.n { text-align: right; white-space: nowrap }
+table.bilan a { color: var(--accent) }
+/* LCA */
+.lca-list { display: flex; flex-direction: column; gap: 12px }
+.lca-item { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; display: flex; flex-direction: column; gap: 8px }
+details.doc { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 16px }
+details.doc summary { cursor: pointer; font-weight: 700 }
+details.doc[open] summary { margin-bottom: 10px }
+.empty { padding: 24px; border: 1px dashed var(--line); border-radius: var(--radius); color: var(--muted); text-align: center }
+footer.pied { background: var(--foot); color: var(--foot-fg); font-size: .85rem } footer.pied .wrap { padding-block: 22px } footer.pied a { color: inherit }
+@media (max-width: 520px) { body { font-size: 16px } .qcard { padding: 14px } h1 { font-size: 1.4rem } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important } }
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="#accueil" aria-label="CNET, entraînement LCA"><b>CN</b><i>ET</i><span>Entraînement LCA</span></a>
+  <nav class="tabs">
+    <a href="#accueil" data-tab="accueil">QI par notion</a>
+    <a href="#lca" data-tab="lca">Épreuves LCA</a>
+  </nav>
+</div></header>
+<main class="wrap" id="app"><p class="lede">Chargement des questions…</p></main>
+<footer class="pied"><div class="wrap">Collège National des Enseignants de Thérapeutique · <a href="https://therap.fr" target="_blank" rel="noopener">therap.fr</a><br>Questions rédigées sur le modèle des annales ECNi/EDN 2016-2026. Vos résultats restent dans ce navigateur. Les articles sous droits sont accessibles par un lien vers l'éditeur.</div></footer>
+
+<script>
+(function () {
+  'use strict';
+  const app = document.getElementById('app');
+  const S = { qi: null, lca: null, set: [], i: 0, rep: {}, revealed: false, origine: 'accueil' };
+  const CLE = 'lca-cnet-v1';
+  const store = {
+    get() { try { return JSON.parse(localStorage.getItem(CLE)) || { scores: {}, prefs: {} } } catch (e) { return { scores: {}, prefs: {} } } },
+    set(v) { try { localStorage.setItem(CLE, JSON.stringify(v)) } catch (e) {} }
+  };
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  // Mini-rendu Markdown : paragraphes, listes, tableaux, gras, italique, liens.
+  function mdInline(t) {
+    return esc(t)
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/(^|[^*])\*([^*\s][^*]*?)\*/g, '$1<em>$2</em>')
+      .replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+  }
+  function md(s, inline) {
+    if (!s) return '';
+    if (inline) return mdInline(s).replace(/\n/g, '<br>');
+    const out = [], lignes = s.split('\n');
+    let i = 0;
+    const cell = l => l.trim().replace(/^\||\|$/g, '').split('|').map(c => c.trim());
+    while (i < lignes.length) {
+      const l = lignes[i];
+      if (!l.trim()) { i++; continue }
+      if (/^\s*\|/.test(l)) {
+        const rows = []; while (i < lignes.length && /^\s*\|/.test(lignes[i])) rows.push(lignes[i++]);
+        const sep = rows.length > 1 && /^\s*\|?\s*:?-{2,}/.test(rows[1]);
+        const head = sep ? cell(rows[0]) : null, body = (sep ? rows.slice(2) : rows).map(cell);
+        out.push('<div class="tablewrap"><table>' + (head ? '<thead><tr>' + head.map(c => '<th>' + mdInline(c) + '</th>').join('') + '</tr></thead>' : '') +
+          '<tbody>' + body.map(r => '<tr>' + r.map(c => '<td>' + mdInline(c) + '</td>').join('') + '</tr>').join('') + '</tbody></table></div>');
+        continue;
+      }
+      if (/^\s*([-*]|\d+\.)\s+/.test(l)) {
+        const ol = /^\s*\d+\./.test(l), items = [];
+        while (i < lignes.length && /^\s*([-*]|\d+\.)\s+/.test(lignes[i])) items.push(lignes[i++].replace(/^\s*([-*]|\d+\.)\s+/, ''));
+        out.push((ol ? '<ol>' : '<ul>') + items.map(x => '<li>' + mdInline(x) + '</li>').join('') + (ol ? '</ol>' : '</ul>'));
+        continue;
+      }
+      const h = l.match(/^(#{1,4})\s+(.*)$/);
+      if (h) { out.push('<h4>' + mdInline(h[2]) + '</h4>'); i++; continue }
+      const par = []; while (i < lignes.length && lignes[i].trim() && !/^\s*(\||[-*]\s|\d+\.\s|#)/.test(lignes[i])) par.push(lignes[i++].replace(/^>\s?/, ''));
+      out.push('<p>' + mdInline(par.join(' ')) + '</p>');
+    }
+    return out.join('');
+  }
+  const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]] } return a };
+  const fmt = x => (Math.round(x * 100) / 100).toString().replace('.', ',');
+
+  // Barème EDN : QRU 1 ou 0 ; QRM 1 / 0,5 / 0,2 / 0 selon 0 / 1 / 2 / ≥3 discordances.
+  function noter(q, coche) {
+    const disc = q.propositions.filter(p => p.juste !== !!coche[p.lettre]).length;
+    if (q.type === 'QRU') return { pts: disc === 0 ? 1 : 0, disc };
+    return { pts: [1, 0.5, 0.2][disc] ?? 0, disc };
+  }
+
+  async function charger(nom) {
+    const r = await fetch('data/' + nom + '.json', { cache: 'no-cache' });
+    if (!r.ok) throw new Error(nom);
+    return r.json();
+  }
+
+  // ---------- Accueil : composer un set ----------
+  function vueAccueil() {
+    const d = S.qi, st = store.get(), prefs = st.prefs || {};
+    const choisies = new Set(prefs.notions || []);
+    const lignes = d.notions.map((n, k) => {
+      const qs = d.questions.filter(q => q.notions.includes(n));
+      const faites = qs.filter(q => st.scores[q.id] !== undefined);
+      const moy = faites.length ? faites.reduce((s, q) => s + st.scores[q.id], 0) / faites.length : null;
+      return `<label class="notion" for="n${k}">
+        <input type="checkbox" id="n${k}" value="${esc(n)}" ${choisies.has(n) ? 'checked' : ''}>
+        <span class="nom">${esc(n)}</span>
+        <span class="meta">${qs.length} QI${faites.length ? ` · ${faites.length} faite${faites.length > 1 ? 's' : ''} · ${Math.round(moy * 100)} %` : ''}</span>
+        ${faites.length ? `<span class="bar" aria-hidden="true"><i style="width:${Math.round(moy * 100)}%"></i></span>` : ''}
+      </label>`;
+    }).join('');
+    app.innerHTML = `<div class="stack">
+      <div class="stack" style="gap:6px"><p class="eyebrow">${d.questions.length} questions isolées · ${d.notions.length} notions</p>
+      <h1>Composer un entraînement</h1>
+      <p class="lede">Cochez une ou plusieurs notions, choisissez le nombre de questions, puis répondez : la correction s'affiche après chaque question, avec la note au barème EDN.</p></div>
+      <div class="row"><button class="ghost" id="tout">Tout cocher</button><button class="ghost" id="rien">Tout décocher</button></div>
+      <div class="notions" id="notions">${lignes}</div>
+      <div class="options">
+        <label class="field" for="nb">Nombre de questions<select id="nb">
+          ${[5, 10, 15, 20, 30, 50, 100].map(n => `<option ${n === (prefs.nb || 10) ? 'selected' : ''}>${n}</option>`).join('')}</select></label>
+        <label class="field" for="typ">Type<select id="typ">
+          <option value="">QRU et QRM</option><option value="QRU" ${prefs.typ === 'QRU' ? 'selected' : ''}>QRU seulement</option><option value="QRM" ${prefs.typ === 'QRM' ? 'selected' : ''}>QRM seulement</option></select></label>
+        <div class="field">Priorité<label class="check" for="prio"><input type="checkbox" id="prio" ${prefs.prio !== false ? 'checked' : ''}> Questions jamais faites ou ratées d'abord</label></div>
+      </div>
+      <div class="sticky-go row"><button id="go">Commencer</button><span class="lede" id="dispo"></span></div>
+    </div>`;
+    const boxes = [...app.querySelectorAll('#notions input')];
+    const maj = () => {
+      const pool = poolCourant();
+      const nb = +app.querySelector('#nb').value;
+      app.querySelector('#dispo').textContent = pool.length ? `${Math.min(nb, pool.length)} question${Math.min(nb, pool.length) > 1 ? 's' : ''} sur ${pool.length} disponibles` : 'Cochez au moins une notion';
+      app.querySelector('#go').disabled = !pool.length;
+    };
+    const poolCourant = () => {
+      const ns = boxes.filter(b => b.checked).map(b => b.value), typ = app.querySelector('#typ').value;
+      return S.qi.questions.filter(q => q.notions.some(n => ns.includes(n)) && (!typ || q.type === typ));
+    };
+    app.querySelector('#tout').onclick = () => { boxes.forEach(b => b.checked = true); maj() };
+    app.querySelector('#rien').onclick = () => { boxes.forEach(b => b.checked = false); maj() };
+    app.firstElementChild.addEventListener('change', maj);
+    app.querySelector('#go').onclick = () => {
+      const nb = +app.querySelector('#nb').value, prio = app.querySelector('#prio').checked;
+      const st2 = store.get();
+      st2.prefs = { notions: boxes.filter(b => b.checked).map(b => b.value), nb, typ: app.querySelector('#typ').value, prio };
+      store.set(st2);
+      let pool = shuffle(poolCourant());
+      if (prio) pool.sort((a, b) => (st2.scores[a.id] ?? -1) - (st2.scores[b.id] ?? -1));
+      demarrer(pool.slice(0, nb), 'accueil', null);
+    };
+    maj();
+  }
+
+  function demarrer(questions, origine, epreuve) {
+    Object.assign(S, { set: questions, i: 0, rep: {}, revealed: false, origine, epreuve, notes: [] });
+    location.hash = 'session'; vueQuestion();
+  }
+
+  // ---------- Question ----------
+  function vueQuestion() {
+    const q = S.set[S.i]; if (!q) return vueBilan();
+    const n = S.set.length, ep = S.epreuve;
+    const coche = S.rep;
+    const html = `<div class="stack">
+      <div class="stack" style="gap:8px">
+        <div class="row" style="justify-content:space-between"><span class="eyebrow">${ep ? esc(ep.reference || ep.titre) + ' · ' : ''}Question ${S.i + 1} sur ${n}</span>
+        <button class="ghost" id="quit">Arrêter</button></div>
+        <div class="progress" aria-hidden="true"><i style="width:${(S.i / n) * 100}%"></i></div>
+      </div>
+      ${ep ? docsEpreuve(ep) : ''}
+      <article class="qcard ${S.revealed ? 'revealed' : ''}">
+        <div class="qhead"><span class="pill">${q.type === 'QRU' ? 'QRU · une seule réponse' : 'QRM · plusieurs réponses'}</span>
+          ${(q.notions || []).map(x => `<span class="pill muted">${esc(x)}</span>`).join('')}</div>
+        <div class="md">${md(q.enonce)}</div>
+        <div class="props" role="${q.type === 'QRU' ? 'radiogroup' : 'group'}">
+        ${q.propositions.map(p => {
+          const c = !!coche[p.lettre];
+          let cls = '', verdict = '';
+          if (S.revealed) {
+            if (p.juste !== c) { cls = 'erreur'; verdict = p.juste ? 'Vrai · non cochée' : 'Faux · cochée à tort' }
+            else if (p.juste) { cls = 'vrai'; verdict = 'Vrai' }
+            else { cls = 'faux'; verdict = 'Faux' }
+          }
+          return `<label class="prop ${cls}" for="p${p.lettre}">
+            <input type="${q.type === 'QRU' ? 'radio' : 'checkbox'}" name="p" id="p${p.lettre}" value="${p.lettre}" ${c ? 'checked' : ''} ${S.revealed ? 'disabled' : ''}>
+            <span class="l">${p.lettre}</span>
+            <span class="t md">${md(p.texte, true)}</span>
+            ${S.revealed ? `<span class="verdict">${verdict}</span>${p.correction ? `<span class="corr md">${md(p.correction, true)}</span>` : ''}` : ''}
+          </label>`;
+        }).join('')}
+        </div>
+        ${S.revealed ? noteHtml(S.notes[S.i]) + (q.commentaire ? `<p class="comment"><strong>Commentaire :</strong> ${md(q.commentaire, true)}</p>` : '') : ''}
+      </article>
+      <div class="actions">
+        <span></span>
+        ${S.revealed ? `<button id="next">${S.i + 1 < n ? 'Question suivante' : 'Voir le bilan'}</button>` : `<button id="valider">Valider</button>`}
+      </div>
+    </div>`;
+    app.innerHTML = html;
+    app.querySelector('#quit').onclick = () => { if (S.notes.length) vueBilan(); else location.hash = S.origine };
+    if (!S.revealed) {
+      app.querySelectorAll('.props input').forEach(inp => inp.onchange = () => {
+        if (q.type === 'QRU') S.rep = {};
+        app.querySelectorAll('.props input').forEach(x => { S.rep[x.value] = x.checked });
+      });
+      app.querySelector('#valider').onclick = () => {
+        const r = noter(q, S.rep); S.notes[S.i] = r; S.revealed = true;
+        const st = store.get(); if (q.id) { st.scores[q.id] = r.pts; store.set(st) }
+        vueQuestion(); app.querySelector('.qcard .note')?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      };
+    } else {
+      app.querySelector('#next').onclick = () => { S.i++; S.rep = {}; S.revealed = false; vueQuestion(); window.scrollTo(0, 0) };
+    }
+  }
+  function noteHtml(r) {
+    const cls = r.pts === 1 ? 'n1' : r.pts > 0 ? 'n05' : 'n0';
+    const txt = r.disc === 0 ? 'Réponse exacte' : `${r.disc} discordance${r.disc > 1 ? 's' : ''}`;
+    return `<div class="note ${cls}"><span class="pts">${fmt(r.pts)} / 1</span><span>${txt}</span></div>`;
+  }
+
+  // ---------- Bilan ----------
+  function vueBilan() {
+    const faites = S.set.slice(0, S.notes.length).map((q, k) => ({ q, r: S.notes[k] })).filter(x => x.r);
+    const total = faites.reduce((s, x) => s + x.r.pts, 0);
+    const parNotion = {};
+    if (!S.epreuve) faites.forEach(({ q, r }) => q.notions.forEach(n => { (parNotion[n] ||= { s: 0, n: 0 }); parNotion[n].s += r.pts; parNotion[n].n++ }));
+    const ratees = faites.filter(x => x.r.pts < 1).map(x => x.q);
+    app.innerHTML = `<div class="stack">
+      <p class="eyebrow">${S.epreuve ? esc(S.epreuve.reference || S.epreuve.titre) : 'Bilan de l\'entraînement'}</p>
+      <div class="score"><span class="big">${fmt(total)} / ${faites.length}</span><span class="lede">soit ${faites.length ? Math.round(total / faites.length * 100) : 0} % des points, au barème EDN</span></div>
+      ${Object.keys(parNotion).length > 1 ? `<h2>Par notion</h2><div class="tablewrap"><table class="bilan"><thead><tr><th>Notion</th><th class="n">Questions</th><th class="n">Points</th></tr></thead><tbody>
+        ${Object.entries(parNotion).map(([n, v]) => `<tr><td>${esc(n)}</td><td class="n">${v.n}</td><td class="n">${fmt(v.s)} / ${v.n}</td></tr>`).join('')}</tbody></table></div>` : ''}
+      <h2>Détail</h2>
+      <div class="tablewrap"><table class="bilan"><thead><tr><th>Question</th><th class="n">Note</th></tr></thead><tbody>
+        ${faites.map(({ q, r }, k) => `<tr><td><a href="#" data-k="${k}">${S.epreuve ? 'Question ' + q.numero : esc(q.serie.replace(/^100QI-partie\d-/, '').replace(/-/g, ' ')) + ' · QI ' + q.numero}</a> <span class="lede">${q.type}</span></td><td class="n">${fmt(r.pts)}</td></tr>`).join('')}
+      </tbody></table></div>
+      <div class="row">
+        ${ratees.length && !S.epreuve ? `<button id="redo">Refaire les ${ratees.length} question${ratees.length > 1 ? 's' : ''} ratée${ratees.length > 1 ? 's' : ''}</button>` : ''}
+        <a class="btn ghost" href="#${S.origine}">${S.epreuve ? 'Autres épreuves' : 'Nouvel entraînement'}</a>
+      </div>
+    </div>`;
+    location.hash = 'bilan';
+    app.querySelector('#redo')?.addEventListener('click', () => demarrer(ratees, S.origine, null));
+    app.querySelectorAll('a[data-k]').forEach(a => a.onclick = e => {
+      e.preventDefault(); const k = +a.dataset.k;
+      revoir(faites[k].q, faites[k].r);
+    });
+  }
+  function revoir(q, r) {
+    // ré-affiche une question corrigée en lecture seule, puis retour au bilan
+    const sauve = { set: S.set, i: S.i, notes: S.notes };
+    S.set = [q]; S.i = 0; S.notes = [r]; S.revealed = true; S.rep = {};
+    q.propositions.forEach(p => { S.rep[p.lettre] = (p.juste && r.disc === 0) });
+    // on ne connaît plus les cases cochées : on affiche la correction seule
+    app.innerHTML = `<div class="stack"><div class="row"><button class="ghost" id="back">Retour au bilan</button></div>
+      <article class="qcard revealed"><div class="qhead"><span class="pill">${q.type}</span>${(q.notions || []).map(x => `<span class="pill muted">${esc(x)}</span>`).join('')}</div>
+      <div class="md">${md(q.enonce)}</div><div class="props">${q.propositions.map(p => `<div class="prop ${p.juste ? 'vrai' : 'faux'}"><span></span><span class="l">${p.lettre}</span><span class="t md">${md(p.texte, true)}</span><span class="verdict">${p.juste ? 'Vrai' : 'Faux'}</span>${p.correction ? `<span class="corr md">${md(p.correction, true)}</span>` : ''}</div>`).join('')}</div>
+      ${q.commentaire ? `<p class="comment"><strong>Commentaire :</strong> ${md(q.commentaire, true)}</p>` : ''}</article></div>`;
+    window.scrollTo(0, 0);
+    app.querySelector('#back').onclick = () => { Object.assign(S, sauve); vueBilan() };
+  }
+
+  // ---------- Épreuves LCA ----------
+  function docsEpreuve(ep) {
+    const lien = ep.pdf && ep.pdf.length ? ep.pdf.map(p => `<a class="btn ghost" href="${esc(p)}" target="_blank" rel="noopener">Article (PDF)</a>`).join('')
+      : ep.lien ? `<a class="btn ghost" href="${esc(ep.lien)}" target="_blank" rel="noopener">Lire l'article chez l'éditeur</a>` : '';
+    return `<details class="doc"${S.i === 0 ? ' open' : ''}><summary>Article, vignette et annexes</summary><div class="stack">
+      <p><strong>${esc(ep.titre)}</strong><br><span class="lede">${esc(ep.reference_complete || ep.reference)}</span></p>
+      ${lien ? `<div class="row">${lien}</div>` : ''}
+      ${ep.vignette ? `<div><h3>Vignette</h3><div class="md">${md(ep.vignette)}</div></div>` : ''}
+      ${ep.glossaire ? `<div><h3>Glossaire</h3><div class="md">${md(ep.glossaire)}</div></div>` : ''}
+      ${ep.annexes.map(a => `<details class="doc"><summary>${esc(a.titre)}</summary><div class="md">${md(a.contenu)}</div></details>`).join('')}
+    </div></details>`;
+  }
+  function vueLca() {
+    const eps = (S.lca && S.lca.epreuves) || [];
+    app.innerHTML = `<div class="stack">
+      <div class="stack" style="gap:6px"><p class="eyebrow">Épreuves sur article</p><h1>Épreuves LCA complètes</h1>
+      <p class="lede">Les questions se passent dans l'ordre, comme le jour de l'EDN, avec l'article et ses annexes à portée de main. La correction s'affiche après chaque question.</p></div>
+      ${eps.length ? `<div class="lca-list">${eps.map((e, k) => `<div class="lca-item"><p class="eyebrow">${esc(e.reference)}</p><h2>${esc(e.titre)}</h2>
+        <p class="lede">${e.questions.length} questions</p><div class="row"><button data-k="${k}">Commencer l'épreuve</button></div></div>`).join('')}</div>`
+        : `<p class="empty">Les épreuves LCA arrivent bientôt.</p>`}
+    </div>`;
+    app.querySelectorAll('button[data-k]').forEach(b => b.onclick = () => {
+      const ep = eps[+b.dataset.k];
+      demarrer(ep.questions.map(q => ({ ...q, id: ep.id + '-' + q.numero })), 'lca', ep);
+    });
+  }
+
+  // ---------- Routage ----------
+  function route() {
+    const h = location.hash.slice(1) || 'accueil';
+    document.querySelectorAll('nav.tabs a').forEach(a => a.setAttribute('aria-current', a.dataset.tab === (h === 'lca' ? 'lca' : (S.origine === 'lca' && (h === 'session' || h === 'bilan')) ? 'lca' : 'accueil') ? 'page' : 'false'));
+    if (h === 'lca') return vueLca();
+    if (h === 'session') return S.set.length ? vueQuestion() : vueAccueil();
+    if (h === 'bilan') return S.notes && S.notes.length ? null : vueAccueil();
+    vueAccueil();
+  }
+  window.addEventListener('hashchange', () => {
+    const h = location.hash.slice(1);
+    if (h === 'bilan' || (h === 'session' && app.querySelector('.qcard'))) { route.nav && route.nav(); return }
+    route();
+  });
+  Promise.all([charger('qi'), charger('lca').catch(() => ({ epreuves: [] }))])
+    .then(([qi, lca]) => { S.qi = qi; S.lca = lca; route() })
+    .catch(() => { app.innerHTML = '<p class="empty">Les questions n\'ont pas pu être chargées. Rechargez la page.</p>' });
+})();
+</script>
+</body>
+</html>

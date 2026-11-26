@@ -1,0 +1,21 @@
+Randomisation
+Aveugle, essai ouvert, placebo, adjudication
+Critères de jugement
+Nombre de sujets nécessaire, puissance, α / β, analyses intermédiaires
+Populations d'analyse (ITT / PP), suivi, données manquantes
+Non-infériorité, supériorité
+Multiplicité, sous-groupes, interaction
+Confusion, ajustement, appariement, score de propension
+Cas-témoins et cohortes
+Causalité, causalité inverse, temps immortel, dose-effet
+Biais de sélection, d'information, de classement
+Population, sélection, éligibilité
+Lecture des résultats (mesures d'association, IC, p, tableaux, figures)
+Études diagnostiques et pronostiques
+Rationnel, contexte, objectif, hypothèse
+Conclusion, transfert au patient
+Type et schéma d'étude
+Validité interne et externe, limites
+Méta-analyses, littérature, recommandations
+Éthique, réglementation, transparence
+Connaissances cliniques et pharmacologiques
