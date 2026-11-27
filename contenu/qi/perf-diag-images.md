@@ -45,7 +45,7 @@ Il est vrai que :
 **B.** À spécificité égale, le score combiné a une sensibilité plus élevée que le qSOFA seul ✅
 > La courbe du score combiné est au-dessus de l'autre pour toute valeur de 1 − Sp : à taux de faux positifs égal, elle détecte plus de décès.
 
-**C.** Il s'agit d'une évaluation de performances diagnostiques
+**C.** Il s'agit d'une évaluation de performances diagnostiques du qSOFA pour détecter un sepsis sévère
 > Le score prédit un événement futur (décès hospitalier) : c'est une évaluation pronostique.
 
 **D.** Ce résultat suffit à recommander l'usage du score combiné dans tous les services d'urgences
