@@ -1,9 +1,9 @@
-# Entraînement LCA – CNET
+# Entraînement LCA
 
-Plateforme d'entraînement à la lecture critique d'article (LCA) du Collège National des Enseignants de Thérapeutique.
+Plateforme d'entraînement à la lecture critique d'article (LCA) pour l'EDN.
 Site : https://lca.therap.fr
 
-Conception et coordination : Pr Hervé Devilliers.
+Conception, rédaction et coordination : Pr Hervé Devilliers.
 
 ## Ajouter des questions
 
@@ -53,4 +53,4 @@ Le script signale les QRU sans bonne réponse unique, les propositions manquante
 
 ## Ce qui est public
 
-© CNET, contenu sous licence CC BY-NC-ND 4.0 (voir LICENSE). Les réponses sont encodées dans les données du site et ne sont décodées qu'après validation. Les résultats des étudiants restent dans leur navigateur (aucun compte, aucune donnée collectée).
+© Pr Hervé Devilliers, contenu sous licence CC BY-NC-ND 4.0 (voir LICENSE). Les réponses sont encodées dans les données du site et ne sont décodées qu'après validation. Les résultats des étudiants restent dans leur navigateur (aucun compte, aucune donnée collectée).
