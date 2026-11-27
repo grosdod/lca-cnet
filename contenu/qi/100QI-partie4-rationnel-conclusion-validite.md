@@ -687,28 +687,3 @@ Un essai randomisé compare deux stratégies de prise en charge de l'arrêt card
 **Notion :** Éthique, réglementation, transparence
 
 ---
-
-## QI 100 (QRU)
-
-Un essai randomisé compare un anticoagulant oral direct (AOD) à un antivitamine K (AVK) dans la fibrillation atriale. Dans le groupe AVK, l'anticoagulation est surveillée par un examen biologique, avec un objectif compris entre 2 et 3. Quel est cet examen ? Quelle est la proposition exacte ?
-
-**A.** Le temps de céphaline activée (TCA)
-> Il surveille l'héparine non fractionnée.
-
-**B.** L'activité anti-Xa
-> Elle surveille les héparines (et peut mesurer certains AOD), pas les AVK.
-
-**C.** L'INR (International Normalized Ratio) ✅
-> Il surveille les AVK, avec une cible habituelle entre 2 et 3 dans la fibrillation atriale.
-
-**D.** Le taux de plaquettes
-> Il surveille le risque de thrombopénie induite par l'héparine.
-
-**E.** Le fibrinogène
-> Il ne sert pas à surveiller les AVK.
-
-**Commentaire :** Piège d'annale visé : connaissances cliniques et pharmacologiques utiles à la lecture (qualité de l'anticoagulation par AVK, temps passé dans la zone thérapeutique) (2019 test EINSTEIN-PE, 2021 test rivaroxaban).
-
-**Notion :** Connaissances cliniques et pharmacologiques
-
----
