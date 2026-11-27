@@ -12,14 +12,11 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
-  publier:
+  construire:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deploiement.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -29,7 +26,6 @@ jobs:
         run: python outils/build.py
       - name: Copier les PDF en libre accès
         run: |
-          mkdir -p site/contenu/lca
           for d in contenu/lca/*/; do
             ls "$d"*.pdf >/dev/null 2>&1 && mkdir -p "site/$d" && cp "$d"*.pdf "site/$d"
           done; true
@@ -37,5 +33,13 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site
+
+  publier:
+    needs: construire
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploiement.outputs.page_url }}
+    steps:
       - id: deploiement
         uses: actions/deploy-pages@v4
