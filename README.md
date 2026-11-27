@@ -43,6 +43,12 @@ Un fichier par série, au format des séries produites dans le projet :
 - `annexe1.md`, `annexe2.md`… : annexes affichées pendant l'épreuve.
 - **Ne déposer le PDF de l'article que s'il est en libre accès** (licence CC-BY…) : tout PDF présent dans le dossier est publié.
 
+## Mode enseignant
+
+Ouvrir **https://lca.therap.fr/?edit** (mémorisé dans le navigateur ; `?edit=0` pour l'enlever). Chaque question affiche alors :
+- **✎ Modifier** : ouvre le fichier dans l'éditeur GitHub (chercher le titre indiqué, par ex. « ## QI 12 ») ; *Commit changes* publie la correction en 1 à 2 minutes. Un collègue sans droit d'écriture obtient une proposition de modification, à accepter ou refuser.
+- **💬 Suggérer une modification** : ouvre un ticket GitHub prérempli (série, numéro, énoncé, propositions).
+
 ## Vérifier avant de déposer (facultatif)
 
 ```

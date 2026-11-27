@@ -86,6 +86,14 @@ def images(texte, dossier):
     return re.sub(r'!\[([^\]]*)\]\(([^)\s]+)\)', remplace, texte)
 
 
+def source(f, motif):
+    """Chemin du fichier dans le dépôt et numéro de ligne du titre de la question (pour le mode enseignant)."""
+    for k, l in enumerate(f.read_text(encoding='utf-8').split('\n'), 1):
+        if re.match(motif, l):
+            return {'fichier': f.relative_to(RACINE).as_posix(), 'ligne': k, 'titre': l.strip()}
+    return {'fichier': f.relative_to(RACINE).as_posix(), 'ligne': 1, 'titre': ''}
+
+
 def lire_qi():
     questions = []
     for f in sorted((CONTENU / 'qi').glob('*.md')):
@@ -108,7 +116,8 @@ def lire_qi():
                 alertes.append(f'{ou} : pas de ligne **Notion :** (classée « Non classée »)')
                 q['notions'] = ['Non classée']
             q.update({'id': f'{slug(serie)}-{num}', 'serie': titre.group(1).strip() if titre else serie,
-                      'numero': int(num), 'type': typ})
+                      'numero': int(num), 'type': typ,
+                      'src': source(f, rf'^## QI\s+{num}\b')})
             questions.append(q)
     return questions
 
@@ -146,7 +155,7 @@ def lire_lca():
                 n_justes = sum(p['juste'] for p in q['propositions'])
                 if typ == 'QRU' and n_justes != 1:
                     erreurs.append(f'{ou} : QRU avec {n_justes} bonne(s) réponse(s)')
-                q.update({'numero': int(num), 'type': typ})
+                q.update({'numero': int(num), 'type': typ, 'src': source(f, rf'^## Question\s+{num}\b')})
                 questions.append(q)
         # annexes : fichiers annexe*.md du dossier, PDF publiés seulement s'ils sont dans le dossier
         for a in sorted(dossier.glob('annexe*.md')):

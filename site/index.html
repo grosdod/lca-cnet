@@ -73,6 +73,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .progress i { display: block; height: 100%; background: var(--accent); transition: width .25s }
 .qcard { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; display: flex; flex-direction: column; gap: 16px }
 .qhead { display: flex; gap: 8px; flex-wrap: wrap; align-items: center }
+.edit-links { margin-left: auto; display: flex; gap: 12px; font-size: .85rem; font-weight: 600 }
+.edit-links a { color: var(--accent) }
+.edit-hint { font-size: .8rem; color: var(--muted); margin-top: -8px }
 .pill { font-size: .78rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); letter-spacing: .03em }
 .pill.muted { background: transparent; border: 1px solid var(--line); color: var(--muted); font-weight: 600 }
 .md { font-family: var(--font-read); font-size: 1.02rem; line-height: 1.6; min-width: 0 }
@@ -137,6 +140,26 @@ footer.pied { background: var(--foot); color: var(--foot-fg); font-size: .85rem 
 (function () {
   'use strict';
   const app = document.getElementById('app');
+  // Mode enseignant : ?edit active (mémorisé dans ce navigateur), ?edit=0 désactive.
+  const DEPOT = 'grosdod/lca-cnet';
+  let EDIT = false;
+  try {
+    const u = new URLSearchParams(location.search);
+    if (u.has('edit')) localStorage.setItem('lca-edit', u.get('edit') === '0' ? '0' : '1');
+    EDIT = localStorage.getItem('lca-edit') === '1';
+  } catch (e) { EDIT = /[?&]edit(?!=0)/.test(location.search) }
+  function liensEdition(q, ep) {
+    if (!EDIT || !q.src) return '';
+    const nom = ep ? (ep.reference || ep.titre) + ' · question ' + q.numero : q.serie + ' · QI ' + q.numero;
+    const corps = [`Question : ${nom}`, `Fichier : ${q.src.fichier} (ligne ${q.src.ligne}, « ${q.src.titre} »)`,
+      `Lien : https://github.com/${DEPOT}/blob/main/${q.src.fichier}#L${q.src.ligne}`, '',
+      'Énoncé :', q.enonce.slice(0, 600), '',
+      ...q.propositions.map(p => `${p.lettre}. ${p.texte}`), '', 'Modification proposée :', ''].join('\n');
+    const ticket = `https://github.com/${DEPOT}/issues/new?title=${encodeURIComponent('Suggestion : ' + nom)}&body=${encodeURIComponent(corps)}`;
+    const editer = `https://github.com/${DEPOT}/edit/main/${q.src.fichier}`;
+    return `<span class="edit-links"><a href="${editer}" target="_blank" rel="noopener" title="Dans l'éditeur, Ctrl+F « ${esc(q.src.titre)} » (ligne ${q.src.ligne})">✎ Modifier</a>
+      <a href="${ticket}" target="_blank" rel="noopener">💬 Suggérer une modification</a></span>`;
+  }
   const S = { qi: null, lca: null, set: [], i: 0, rep: {}, revealed: false, origine: 'accueil' };
   const CLE = 'lca-cnet-v1';
   const store = {
@@ -289,7 +312,8 @@ footer.pied { background: var(--foot); color: var(--foot-fg); font-size: .85rem 
       ${ep ? docsEpreuve(ep) : ''}
       <article class="qcard ${S.revealed ? 'revealed' : ''}">
         <div class="qhead"><span class="pill">${q.type === 'QRU' ? 'QRU · une seule réponse' : q.type === 'QRP' ? 'QRP · nombre de réponses précisé dans l\'énoncé' : 'QRM · plusieurs réponses'}</span>
-          ${(q.notions || []).map(x => `<span class="pill muted">${esc(x)}</span>`).join('')}</div>
+          ${(q.notions || []).map(x => `<span class="pill muted">${esc(x)}</span>`).join('')}${liensEdition(q, ep)}</div>
+        ${EDIT && q.src ? `<p class="edit-hint">Dans l'éditeur GitHub : Ctrl+F « ${esc(q.src.titre)} » (ligne ${q.src.ligne})</p>` : ''}
         <div class="md">${md(q.enonce)}</div>
         <div class="props" role="${q.type === 'QRU' ? 'radiogroup' : 'group'}">
         ${q.propositions.map(p => {
